@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding budget checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Yeseva+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FDF6F4;--surface:#FFFFFF;--ink:#2B1419;--muted:#7A5E63;--maroon:#8C1D3A;--on-maroon:#FFFFFF;--marigold:#E9A10F;--leaf:#2E7D4F;--on-leaf:#FFFFFF;--line:#EEDDD9;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1B1013;--surface:#28181D;--ink:#F6E9EA;--muted:#BFA3A8;--maroon:#E8869E;--on-maroon:#2B1419;--marigold:#F2B630;--leaf:#5CC28A;--on-leaf:#10261A;--line:#3E2930;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1B1013;--surface:#28181D;--ink:#F6E9EA;--muted:#BFA3A8;--maroon:#E8869E;--on-maroon:#2B1419;--marigold:#F2B630;--leaf:#5CC28A;--on-leaf:#10261A;--line:#3E2930;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:17px;line-height:1.5}
+#app{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-family:'Yeseva One',Georgia,serif;font-weight:400;font-size:2.1rem;line-height:1.1;margin:8px 0 2px;color:var(--maroon)}
+.sub{margin:0;color:var(--muted)}
+.status{font-size:.85rem;color:var(--muted);padding-top:14px;white-space:nowrap}
+.sum{margin:20px 0 16px;padding:18px 16px 14px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+.figs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lbl{display:block;font-size:.85rem;color:var(--muted)}
+.figs strong{font-size:1.15rem;font-variant-numeric:tabular-nums;font-weight:700}
+.figs .paid{color:var(--leaf)}
+.garland{display:flex;justify-content:space-between;align-items:flex-start;margin:16px 0 10px;height:26px}
+.bloom{width:13px;height:13px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line);transform:translateY(var(--y));transition:background .4s,border-color .4s}
+.bloom.on{background:radial-gradient(circle,var(--maroon) 0 22%,var(--marigold) 26% 100%);border-color:var(--marigold)}
+.prog{margin:0;font-size:.9rem;color:var(--muted)}
+.note{display:block;margin-bottom:18px}
+input[type=text]{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:4px}
+input:focus-visible,button:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+.tabs{display:flex;gap:6px;margin:0 0 6px}
+.tabs button{font:inherit;font-size:.95rem;padding:5px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--maroon);border-color:var(--maroon);color:var(--on-maroon)}
+.list{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:auto 1fr;gap:0 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.check{width:30px;height:30px;margin-top:2px;border-radius:50%;border:2px solid var(--muted);background:transparent;display:grid;place-items:center;cursor:pointer;color:transparent;padding:0}
+.is-paid .check{background:var(--leaf);border-color:var(--leaf);color:var(--on-leaf)}
+.check svg{width:16px;height:16px}
+.row{all:unset;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:0 10px;min-width:0}
+.row:focus-visible{outline:2px solid var(--marigold);outline-offset:2px;border-radius:6px}
+.name{font-weight:600}
+.is-paid .name{text-decoration:line-through;color:var(--muted)}
+.amt{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.meta,.nline{grid-column:1/-1;font-size:.88rem;color:var(--muted)}
+.meta.ok{color:var(--leaf)}
+.nline{font-style:italic}
+.edit{grid-column:2;display:grid;gap:10px;margin-top:12px;padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.edit label{display:block;font-size:.85rem;color:var(--muted)}
+.edit label.tog{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:1rem}
+.tog input{width:20px;height:20px;margin:0;accent-color:var(--leaf)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.del{justify-self:start;font:inherit;font-size:.9rem;background:none;border:none;color:var(--maroon);padding:4px 0;cursor:pointer;text-decoration:underline}
+.add{margin-top:18px;width:100%;font:inherit;font-weight:600;padding:12px;border-radius:12px;border:1.5px dashed var(--maroon);background:transparent;color:var(--maroon);cursor:pointer}
+.empty{color:var(--muted);padding:16px 0;margin:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.login{margin-top:28px;padding:20px 16px;background:var(--surface);border:1px solid var(--line);border-radius:18px;display:grid;gap:12px}
+.login p{margin:0;color:var(--muted)}
+.login label{display:block;font-size:.85rem;color:var(--muted)}
+.login input{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:4px}
+.btn{font:inherit;font-weight:600;padding:11px 16px;border-radius:12px;border:none;background:var(--maroon);color:var(--on-maroon);cursor:pointer}
+.err{color:var(--maroon);font-size:.92rem}
+.who{display:flex;justify-content:space-between;gap:12px;margin-top:28px;font-size:.85rem;color:var(--muted)}
+.link{all:unset;cursor:pointer;text-decoration:underline;color:var(--maroon)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script type="module">
+// ============================================================
+// Firebase settings for the marraige-checklist project.
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBjBQiwbT3hmpmmlT4I0aGS0hQSMKbv7-Y",
+  authDomain: "marraige-checklist.firebaseapp.com",
+  projectId: "marraige-checklist",
+  storageBucket: "marraige-checklist.firebasestorage.app",
+  messagingSenderId: "44546753735",
+  appId: "1:44546753735:web:8dcf065a92be997afe2ae2"
+};
+// ============================================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const START_LIST = [{"name": "Makeup", "total": 3180, "deposit": 500, "depPaid": true, "paid": false, "note": ""}, {"name": "Photography", "total": 3280, "deposit": 1640, "depPaid": false, "paid": false, "note": ""}, {"name": "Videography", "total": 1300, "deposit": 500, "depPaid": false, "paid": false, "note": ""}, {"name": "Decoration", "total": 5000, "deposit": 0, "depPaid": false, "paid": false, "note": "Could be RM5,000 to RM6,000"}, {"name": "Temple", "total": 1800, "deposit": 350, "depPaid": true, "paid": false, "note": ""}, {"name": "Bride outfit (2 sarees)", "total": 3000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Saree blouse", "total": 500, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Groom outfit", "total": 1200, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Nadhaswaram", "total": 1200, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Iyer", "total": 1000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Garland", "total": 1000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Car decoration", "total": 500, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Malungsu", "total": 2000, "deposit": 0, "depPaid": false, "paid": false, "note": "+ car"}, {"name": "Gold", "total": 10000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Invitation", "total": 2000, "deposit": 0, "depPaid": false, "paid": false, "note": "Deva: 800, Mari: 200"}, {"name": "Henna", "total": 600, "deposit": 0, "depPaid": false, "paid": false, "note": ""}];
+const START_NOTE = "November: RM7,900";
+
+const app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => 'RM' + Math.round(n || 0).toLocaleString('en-MY');
+const num = s => { const n = parseFloat(String(s).replace(/[^0-9.]/g, '')); return isNaN(n) ? 0 : n; };
+const paidOf = i => i.paid ? i.total : (i.depPaid ? Math.min(i.deposit, i.total) : 0);
+
+if (firebaseConfig.apiKey === "PASTE_HERE") {
+  app.innerHTML = '<h1>Wedding budget</h1><div class="login"><p>Almost ready. Paste your Firebase settings at the top of the code in index.html. The steps are in README.md.</p></div>';
+  throw new Error('Firebase config missing');
+}
+
+const fb = initializeApp(firebaseConfig);
+const auth = getAuth(fb);
+const db = getFirestore(fb);
+const itemsCol = collection(db, 'items');
+const metaDoc = doc(db, 'meta', 'main');
+
+let items = [], note = '', loaded = false, user = null, statusText = '', errorText = '';
+let view = { open: null, filter: 'all', armed: null };
+let unsubs = [], pendingRender = false;
+
+function setStatus(t){ statusText = t; const el = document.getElementById('status'); if (el) el.textContent = t; }
+function find(id){ return items.find(i => i.id === id); }
+
+// ---------- Login ----------
+function renderLogin(msg){
+  app.innerHTML = '<header class="top"><div><h1>Wedding budget</h1><p class="sub">Our checklist for September 2027</p></div></header>' +
+    '<div class="login"><p>Sign in with Google to see your shared list.</p>' +
+    (msg ? '<span class="err">' + esc(msg) + '</span>' : '') +
+    '<button class="btn" id="googleBtn">Sign in with Google</button></div>';
+  document.getElementById('googleBtn').addEventListener('click', async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try { await signInWithPopup(auth, provider); }
+    catch (err) {
+      if (err.code === 'auth/popup-blocked') { signInWithRedirect(auth, provider); return; }
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
+      renderLogin(err.code === 'auth/unauthorized-domain' ? 'This website is not added in Firebase yet. Add it under Authentication > Settings > Authorized domains.' : 'Could not sign in. ' + err.code);
+    }
+  });
+}
+
+onAuthStateChanged(auth, u => {
+  unsubs.forEach(f => f()); unsubs = [];
+  user = u; loaded = false; items = []; errorText = '';
+  if (!u) { renderLogin(); return; }
+  app.innerHTML = '<p class="empty">Loading…</p>';
+  const onErr = err => { errorText = err.code === 'permission-denied' ? 'This account is not allowed to see the list. Only the two Gmail accounts in your Firestore rules can open it.' : 'Could not load the list. ' + err.code; render(); };
+  unsubs.push(onSnapshot(itemsCol, { includeMetadataChanges: true }, snap => {
+    items = snap.docs.map(d => ({ id: d.id, total: 0, deposit: 0, depPaid: false, paid: false, note: '', name: '', order: 0, ...d.data() }))
+      .sort((a, b) => a.order - b.order);
+    loaded = true;
+    setStatus(snap.metadata.hasPendingWrites ? 'Saving…' : 'Synced');
+    softRender();
+  }, onErr));
+  unsubs.push(onSnapshot(metaDoc, snap => { note = snap.exists() ? (snap.data().note || '') : ''; softRender(); }, onErr));
+});
+
+// Don't rebuild the page while someone is typing.
+function softRender(){
+  const a = document.activeElement;
+  if (a && app.contains(a) && a.matches('input[type=text]')) { pendingRender = true; return; }
+  render();
+}
+app.addEventListener('focusout', () => setTimeout(() => { if (pendingRender) { pendingRender = false; softRender(); } }, 0));
+
+// ---------- Main page ----------
+function summaryInner(){
+  let t = 0, p = 0, done = 0;
+  items.forEach(i => { t += i.total; p += paidOf(i); if (i.paid) done++; });
+  const pct = t ? Math.round(p / t * 100) : 0, N = 24, lit = p > 0 ? Math.max(1, Math.round(p / t * N)) : 0;
+  let blooms = '';
+  for (let k = 0; k < N; k++) blooms += '<span class="bloom' + (k < lit ? ' on' : '') + '" style="--y:' + (Math.sin(Math.PI * k / (N - 1)) * 10).toFixed(1) + 'px"></span>';
+  return '<div class="figs"><div><span class="lbl">Total</span><strong>' + fmt(t) + '</strong></div>' +
+    '<div><span class="lbl">Paid</span><strong class="paid">' + fmt(p) + '</strong></div>' +
+    '<div><span class="lbl">Still to pay</span><strong>' + fmt(t - p) + '</strong></div></div>' +
+    '<div class="garland" role="img" aria-label="' + pct + '% paid">' + blooms + '</div>' +
+    '<p class="prog">' + pct + '% of the money paid. ' + done + ' of ' + items.length + ' items fully paid.</p>';
+}
+
+function rowInner(i){
+  let meta, ok = false;
+  if (i.paid) { meta = 'Fully paid'; ok = true; }
+  else if (i.deposit > 0) meta = i.depPaid ? 'Deposit ' + fmt(i.deposit) + ' paid. Balance ' + fmt(i.total - i.deposit) : 'Deposit ' + fmt(i.deposit) + ' not paid yet';
+  else meta = 'Not paid yet';
+  return '<span class="name">' + esc(i.name || 'Untitled') + '</span><span class="amt">' + fmt(i.total) + '</span>' +
+    '<span class="meta' + (ok ? ' ok' : '') + '">' + meta + '</span>' + (i.note ? '<span class="nline">' + esc(i.note) + '</span>' : '');
+}
+
+function editor(i){
+  return '<div class="edit">' +
+    '<label>Name<input type="text" data-f="name" value="' + esc(i.name) + '"></label>' +
+    '<div class="two"><label>Total (RM)<input type="text" inputmode="decimal" data-f="total" value="' + i.total + '"></label>' +
+    '<label>Deposit (RM)<input type="text" inputmode="decimal" data-f="deposit" value="' + i.deposit + '"></label></div>' +
+    '<label class="tog"><input type="checkbox" data-f="depPaid"' + (i.depPaid ? ' checked' : '') + '> Deposit paid</label>' +
+    '<label>Note<input type="text" data-f="note" value="' + esc(i.note) + '"></label>' +
+    '<button class="del" data-del>' + (view.armed === i.id ? 'Tap again to delete' : 'Delete item') + '</button></div>';
+}
+
+function render(){
+  if (!user) return;
+  const head = '<header class="top"><div><h1>Wedding budget</h1><p class="sub">Our checklist for September 2027</p></div><span class="status" id="status">' + statusText + '</span></header>';
+  const foot = '<div class="who"><span>Signed in as ' + esc(user.email) + '</span><button class="link" id="outBtn">Sign out</button></div>';
+  if (errorText) { app.innerHTML = head + '<div class="login"><span class="err">' + esc(errorText) + '</span></div>' + foot; return; }
+  if (!loaded) return;
+  if (!items.length) {
+    app.innerHTML = head + '<div class="login"><p>Your shared list is empty.</p><button class="btn" id="seedBtn">Load the list from my diary</button><button class="link" id="addBtn">Or start with a blank item</button></div>' + foot;
+    return;
+  }
+  const shown = items.filter(i => view.filter === 'all' || (view.filter === 'done' ? i.paid : !i.paid));
+  const tabs = [['all','All'],['todo','To pay'],['done','Paid']].map(t => '<button data-filter="' + t[0] + '" aria-pressed="' + (view.filter === t[0]) + '">' + t[1] + '</button>').join('');
+  const list = shown.map(i => {
+    const open = view.open === i.id;
+    return '<li class="item' + (i.paid ? ' is-paid' : '') + '" data-id="' + i.id + '">' +
+      '<button class="check" aria-pressed="' + i.paid + '" aria-label="Fully paid: ' + esc(i.name) + '"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></button>' +
+      '<button class="row" aria-expanded="' + open + '">' + rowInner(i) + '</button>' + (open ? editor(i) : '') + '</li>';
+  }).join('');
+  app.innerHTML = head + '<section class="sum" id="summary">' + summaryInner() + '</section>' +
+    '<label class="note"><span class="lbl">Notes</span><input type="text" id="noteIn" value="' + esc(note) + '"></label>' +
+    '<div class="tabs">' + tabs + '</div>' +
+    (list ? '<ul class="list">' + list + '</ul>' : '<p class="empty">Nothing here yet.</p>') +
+    '<button class="add" id="addBtn">Add an item</button>' + foot;
+}
+
+// ---------- Saving ----------
+async function save(promise){
+  setStatus('Saving…');
+  try { await promise; } catch (err) { setStatus('Not saved. ' + (err.code === 'permission-denied' ? 'No permission.' : 'Check your internet.')); }
+}
+
+app.addEventListener('click', async e => {
+  const t = e.target;
+  if (t.closest('#outBtn')) { signOut(auth); return; }
+  if (t.closest('#seedBtn')) {
+    const b = writeBatch(db);
+    START_LIST.forEach((it, k) => b.set(doc(itemsCol), { ...it, order: k + 1 }));
+    b.set(metaDoc, { note: START_NOTE });
+    save(b.commit()); return;
+  }
+  const li = t.closest('.item'), item = li ? find(li.dataset.id) : null;
+  if (t.closest('.check') && item) { item.paid = !item.paid; render(); save(updateDoc(doc(itemsCol, item.id), { paid: item.paid })); return; }
+  if (t.closest('.row') && item) { view.open = view.open === item.id ? null : item.id; view.armed = null; render(); return; }
+  const f = t.closest('[data-filter]');
+  if (f) { view.filter = f.dataset.filter; render(); return; }
+  if (t.closest('[data-del]') && item) {
+    if (view.armed === item.id) { view.open = null; view.armed = null; save(deleteDoc(doc(itemsCol, item.id))); }
+    else { view.armed = item.id; t.closest('[data-del]').textContent = 'Tap again to delete'; }
+    return;
+  }
+  if (t.closest('#addBtn')) {
+    const ref = doc(itemsCol);
+    const order = items.reduce((m, i) => Math.max(m, i.order || 0), 0) + 1;
+    view.open = ref.id; view.filter = 'all';
+    await save(setDoc(ref, { name: 'New item', total: 0, deposit: 0, depPaid: false, paid: false, note: '', order }));
+    const inp = app.querySelector('.item[data-id="' + ref.id + '"] [data-f="name"]');
+    if (inp) { inp.focus(); inp.select(); }
+  }
+});
+
+app.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'noteIn') { note = t.value; return; }
+  const key = t.dataset.f; if (!key || key === 'depPaid') return;
+  const li = t.closest('.item'), item = li && find(li.dataset.id); if (!item) return;
+  item[key] = (key === 'total' || key === 'deposit') ? num(t.value) : t.value;
+  li.querySelector('.row').innerHTML = rowInner(item);
+  document.getElementById('summary').innerHTML = summaryInner();
+});
+
+app.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'noteIn') { save(setDoc(metaDoc, { note: t.value })); return; }
+  const key = t.dataset.f; if (!key) return;
+  const li = t.closest('.item'), item = li && find(li.dataset.id); if (!item) return;
+  if (key === 'depPaid') { item.depPaid = t.checked; render(); }
+  save(updateDoc(doc(itemsCol, item.id), { [key]: item[key] }));
+});
+</script>
+</body>
+</html>
