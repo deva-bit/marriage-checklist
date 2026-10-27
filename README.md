@@ -39,4 +39,4 @@ Open the site and sign in. Tap **Load the list from my diary** once. This adds a
 Your girlfriend signs in with her account and sees the same list.
 
 Note: if your repo is private, GitHub Pages may need a paid plan. Making the repo public is fine:
-your list data is in Firebase, not in the code.
+your list data is in Firebase, not in the code. 
