@@ -62,6 +62,38 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--marigold);outli
 .err{color:var(--maroon);font-size:.92rem}
 .who{display:flex;justify-content:space-between;gap:12px;margin-top:28px;font-size:.85rem;color:var(--muted)}
 .link{all:unset;cursor:pointer;text-decoration:underline;color:var(--maroon)}
+.money{margin-top:-4px}
+.money .figs{grid-template-columns:repeat(2,1fr);text-align:center}
+.given{all:unset;cursor:pointer;display:block;border-radius:8px}
+.given:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+.given .lbl::after{content:" \25BE"}
+.money .left{color:var(--leaf)}
+.money .left.neg{color:var(--maroon)}
+.warn{margin:8px 0 0;font-size:.9rem;color:var(--maroon);text-align:center}
+.gifts{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--line)}
+.gifts li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.gifts .d{color:var(--muted)}
+.gifts .x{all:unset;cursor:pointer;color:var(--muted);padding:0 4px;font-size:1.1rem}
+.addrow{display:flex;gap:8px;margin-top:12px}
+.addrow input{flex:1;margin-top:0}
+.small{font:inherit;font-size:.95rem;padding:8px 12px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
+.small.go{background:var(--maroon);border-color:var(--maroon);color:var(--on-maroon);font-weight:600}
+.money .add{margin-top:12px}
+.mood{margin:8px 0 0;font-size:.95rem;text-align:center;color:var(--muted)}
+.count{display:inline-block;margin-top:6px;font-size:.9rem;font-weight:600;color:var(--maroon);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
+.petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.petal{position:absolute;top:-24px;width:14px;height:10px;border-radius:60% 40% 60% 40%;background:var(--marigold);opacity:.95;animation:fall linear forwards}
+.petal.r{background:var(--maroon)}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--rot));opacity:.6}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:min(92vw,420px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.95rem;text-align:center;z-index:60;animation:pop 3.2s ease forwards}
+.love{position:relative;margin:16px 0 0;padding:14px 40px 14px 16px;border-radius:14px;background:var(--surface);border:1.5px solid var(--marigold);font-size:1.02rem}
+.love small{display:block;color:var(--muted);font-size:.8rem;margin-bottom:2px}
+.love .x{all:unset;cursor:pointer;position:absolute;top:8px;right:12px;color:var(--muted);font-size:1.2rem}
+.cheer{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:24px;background:rgba(20,8,12,.45)}
+.cheer-card{max-width:340px;width:100%;text-align:center;background:var(--surface);color:var(--ink);border-radius:20px;padding:26px 20px 20px;border:2px solid var(--marigold)}
+.cheer-card .big{font-size:3rem;line-height:1}
+.cheer-card p{margin:12px 0 18px;font-size:1.1rem}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,10px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -87,6 +119,23 @@ import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc
 const START_LIST = [{"name": "Makeup", "total": 3180, "deposit": 500, "depPaid": true, "paid": false, "note": ""}, {"name": "Photography", "total": 3280, "deposit": 1640, "depPaid": false, "paid": false, "note": ""}, {"name": "Videography", "total": 1300, "deposit": 500, "depPaid": false, "paid": false, "note": ""}, {"name": "Decoration", "total": 5000, "deposit": 0, "depPaid": false, "paid": false, "note": "Could be RM5,000 to RM6,000"}, {"name": "Temple", "total": 1800, "deposit": 350, "depPaid": true, "paid": false, "note": ""}, {"name": "Bride outfit (2 sarees)", "total": 3000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Saree blouse", "total": 500, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Groom outfit", "total": 1200, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Nadhaswaram", "total": 1200, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Iyer", "total": 1000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Garland", "total": 1000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Car decoration", "total": 500, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Malungsu", "total": 2000, "deposit": 0, "depPaid": false, "paid": false, "note": "+ car"}, {"name": "Gold", "total": 10000, "deposit": 0, "depPaid": false, "paid": false, "note": ""}, {"name": "Invitation", "total": 2000, "deposit": 0, "depPaid": false, "paid": false, "note": "Deva: 800, Mari: 200"}, {"name": "Henna", "total": 600, "deposit": 0, "depPaid": false, "paid": false, "note": ""}];
 const START_NOTE = "November: RM7,900";
 
+// Love notes: only her account sees these. Change them to your own words.
+const HER_EMAIL = "rgthiviya19@gmail.com";
+const LOVE_NOTES = [
+  "Thank you for doing all this. You're amazing 💛 – Deva",
+  "I see how hard you work for our wedding. Thank you 🙏 – Deva",
+  "You're the best organiser in the world 😄 – Deva",
+  "Every tick here makes me smile. Love you 💕 – Deva",
+  "Rest a little today. You deserve it ☕ – Deva"
+];
+const MILESTONES = {
+  25: ["🌟", "25% paid! Great start. You're doing amazing!"],
+  50: ["💛", "Halfway there! Thank you for all your hard work."],
+  75: ["🏆", "75% done! Almost there, superstar!"],
+  100: ["💍", "Everything is paid! You did it! Thank you for everything."]
+};
+const todaysNote = LOVE_NOTES[Math.floor(Math.random() * LOVE_NOTES.length)];
+
 const app = document.getElementById('app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = n => 'RM' + Math.round(n || 0).toLocaleString('en-MY');
@@ -103,9 +152,10 @@ const auth = getAuth(fb);
 const db = getFirestore(fb);
 const itemsCol = collection(db, 'items');
 const metaDoc = doc(db, 'meta', 'main');
+const giftsCol = collection(db, 'gifts');
 
-let items = [], note = '', loaded = false, user = null, statusText = '', errorText = '';
-let view = { open: null, filter: 'all', armed: null };
+let items = [], gifts = [], note = '', metaData = {}, cheerBusy = false, loaded = false, user = null, statusText = '', errorText = '';
+let view = { open: null, filter: 'all', armed: null, showGifts: false, adding: false, gArmed: null };
 let unsubs = [], pendingRender = false;
 
 function setStatus(t){ statusText = t; const el = document.getElementById('status'); if (el) el.textContent = t; }
@@ -131,7 +181,7 @@ function renderLogin(msg){
 
 onAuthStateChanged(auth, u => {
   unsubs.forEach(f => f()); unsubs = [];
-  user = u; loaded = false; items = []; errorText = '';
+  user = u; loaded = false; items = []; gifts = []; errorText = '';
   if (!u) { renderLogin(); return; }
   app.innerHTML = '<p class="empty">Loading…</p>';
   const onErr = err => { errorText = err.code === 'permission-denied' ? 'This account is not allowed to see the list. Only the two Gmail accounts in your Firestore rules can open it.' : 'Could not load the list. ' + err.code; render(); };
@@ -142,7 +192,12 @@ onAuthStateChanged(auth, u => {
     setStatus(snap.metadata.hasPendingWrites ? 'Saving…' : 'Synced');
     softRender();
   }, onErr));
-  unsubs.push(onSnapshot(metaDoc, snap => { note = snap.exists() ? (snap.data().note || '') : ''; softRender(); }, onErr));
+  unsubs.push(onSnapshot(giftsCol, snap => {
+    gifts = snap.docs.map(d => ({ id: d.id, amount: 0, date: '', ...d.data() }))
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    softRender();
+  }, onErr));
+  unsubs.push(onSnapshot(metaDoc, snap => { metaData = snap.exists() ? snap.data() : {}; note = metaData.note || ''; softRender(); }, onErr));
 });
 
 // Don't rebuild the page while someone is typing.
@@ -167,6 +222,113 @@ function summaryInner(){
     '<p class="prog">' + pct + '% of the money paid. ' + done + ' of ' + items.length + ' items fully paid.</p>';
 }
 
+function moneyInner(){
+  const given = gifts.reduce((s, g) => s + (g.amount || 0), 0);
+  const paid = items.reduce((s, i) => s + paidOf(i), 0);
+  const left = given - paid;
+  let html = '<div class="figs"><div><button class="given" id="toggleGifts" aria-expanded="' + view.showGifts + '"><span class="lbl">Given to her</span><strong>' + fmt(given) + '</strong></button></div>' +
+    '<div><span class="lbl">Left in bank</span><strong class="left' + (left < 0 ? ' neg' : '') + '">' + (left < 0 ? '-' : '') + fmt(Math.abs(left)) + '</strong></div></div>';
+  const mood = moodLine(given, left);
+  if (mood) html += '<p class="mood">' + mood + '</p>';
+  if (left < 0) html += '<p class="warn">Send her ' + fmt(-left) + ' more</p>';
+  if (view.showGifts) {
+    html += gifts.length
+      ? '<ul class="gifts">' + gifts.map(g => '<li><span><span class="d">' + esc(fmtDate(g.date)) + '</span> &nbsp;' + fmt(g.amount) + '</span>' +
+          '<button class="x" data-gdel="' + g.id + '" aria-label="Delete">' + (view.gArmed === g.id ? 'Delete?' : '\u00d7') + '</button></li>').join('') + '</ul>'
+      : '<p class="warn" style="color:var(--muted)">No money added yet.</p>';
+  }
+  html += view.adding
+    ? '<div class="addrow"><input type="text" inputmode="decimal" id="moneyIn" placeholder="Amount in RM"><button class="small go" id="saveMoney">Add</button><button class="small" id="cancelMoney">Cancel</button></div>'
+    : '<button class="add" id="addMoneyBtn">+ Add money</button>';
+  return html;
+}
+
+function countdown(){
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  const days = Math.round((new Date(2027, 8, 3) - now) / 86400000);
+  const t = days > 1 ? days.toLocaleString('en-MY') + ' days to go 💍' : days === 1 ? 'Tomorrow! 💍' : days === 0 ? 'Today is the day! 🎉' : 'Happily married 🎉';
+  return '<span class="count">' + t + '</span>';
+}
+
+function moodLine(given, left){
+  if (!given) return '';
+  if (left < 0) return 'Bank is crying 😭';
+  if (left < given * 0.2) return 'Bank is getting nervous 😬';
+  return 'Bank is happy 😄';
+}
+
+function flowerRain(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.createElement('div'); box.className = 'petals';
+  for (let k = 0; k < 36; k++) {
+    const p = document.createElement('span');
+    p.className = 'petal' + (k % 5 === 0 ? ' r' : '');
+    p.style.left = (Math.random() * 100) + 'vw';
+    p.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.setProperty('--dx', ((Math.random() - 0.5) * 120) + 'px');
+    p.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    box.appendChild(p);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3500);
+}
+
+const JOKES = [
+  'Paid! Your bank account felt that 😅',
+  'Done! Maggi for dinner this week 🍜',
+  'Big one paid! Wallet is now on a diet 🥲',
+  'Paid! One less thing to worry about 🙌',
+  'Done! Amma will be proud 😄'
+];
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3400);
+}
+function celebrate(item){
+  flowerRain();
+  if (item.total >= 2000) {
+    const n = (item.name || '').toLowerCase();
+    toast(n.includes('gold') ? 'Gold paid! Wallet is now on a diet 🥲' : JOKES[Math.floor(Math.random() * JOKES.length)]);
+  }
+}
+
+function isHer(){ return !!(user && user.email && user.email.toLowerCase() === HER_EMAIL); }
+
+function checkMilestone(){
+  if (!isHer() || !loaded || !items.length || cheerBusy) return;
+  let t = 0, p = 0;
+  items.forEach(i => { t += i.total; p += paidOf(i); });
+  const pct = t ? p / t * 100 : 0;
+  const m = pct >= 100 ? 100 : Math.floor(pct / 25) * 25;
+  if (m > 0 && m > (metaData.herMilestone || 0)) {
+    cheerBusy = true;
+    metaData.herMilestone = m;
+    save(setDoc(metaDoc, { herMilestone: m }, { merge: true }));
+    setTimeout(() => {
+      const [emoji, msg] = MILESTONES[m];
+      const box = document.createElement('div'); box.className = 'cheer';
+      box.innerHTML = '<div class="cheer-card" role="dialog" aria-label="Milestone"><div class="big">' + emoji + '</div><p>' + esc(msg) + '</p><button class="btn" id="closeCheer">Thank you!</button></div>';
+      document.body.appendChild(box);
+      flowerRain();
+      box.addEventListener('click', e => { if (e.target === box || e.target.id === 'closeCheer') { box.remove(); cheerBusy = false; } });
+    }, 600);
+  }
+}
+
+function fmtDate(s){
+  if (!s) return '';
+  const d = new Date(s + 'T00:00:00');
+  return isNaN(d) ? s : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function today(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 function rowInner(i){
   let meta, ok = false;
   if (i.paid) { meta = 'Fully paid'; ok = true; }
@@ -188,7 +350,7 @@ function editor(i){
 
 function render(){
   if (!user) return;
-  const head = '<header class="top"><div><h1>Wedding budget</h1><p class="sub">Our checklist for September 2027</p></div><span class="status" id="status">' + statusText + '</span></header>';
+  const head = '<header class="top"><div><h1>Wedding budget</h1><p class="sub">Our wedding: 3 September 2027</p>' + countdown() + '</div><span class="status" id="status">' + statusText + '</span></header>';
   const foot = '<div class="who"><span>Signed in as ' + esc(user.email) + '</span><button class="link" id="outBtn">Sign out</button></div>';
   if (errorText) { app.innerHTML = head + '<div class="login"><span class="err">' + esc(errorText) + '</span></div>' + foot; return; }
   if (!loaded) return;
@@ -204,7 +366,10 @@ function render(){
       '<button class="check" aria-pressed="' + i.paid + '" aria-label="Fully paid: ' + esc(i.name) + '"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></button>' +
       '<button class="row" aria-expanded="' + open + '">' + rowInner(i) + '</button>' + (open ? editor(i) : '') + '</li>';
   }).join('');
-  app.innerHTML = head + '<section class="sum" id="summary">' + summaryInner() + '</section>' +
+  const love = (isHer() && !view.loveClosed) ? '<div class="love"><small>A note from Deva</small>' + esc(todaysNote) + '<button class="x" id="closeLove" aria-label="Close">\u00d7</button></div>' : '';
+  setTimeout(checkMilestone, 0);
+  app.innerHTML = head + love + '<section class="sum" id="summary">' + summaryInner() + '</section>' +
+    '<section class="sum money" id="money">' + moneyInner() + '</section>' +
     '<label class="note"><span class="lbl">Notes</span><input type="text" id="noteIn" value="' + esc(note) + '"></label>' +
     '<div class="tabs">' + tabs + '</div>' +
     (list ? '<ul class="list">' + list + '</ul>' : '<p class="empty">Nothing here yet.</p>') +
@@ -223,11 +388,23 @@ app.addEventListener('click', async e => {
   if (t.closest('#seedBtn')) {
     const b = writeBatch(db);
     START_LIST.forEach((it, k) => b.set(doc(itemsCol), { ...it, order: k + 1 }));
-    b.set(metaDoc, { note: START_NOTE });
+    b.set(metaDoc, { note: START_NOTE }, { merge: true });
     save(b.commit()); return;
   }
+  if (t.closest('#closeLove')) { view.loveClosed = true; render(); return; }
+  if (t.closest('#toggleGifts')) { view.showGifts = !view.showGifts; view.gArmed = null; render(); return; }
+  if (t.closest('#addMoneyBtn')) { view.adding = true; render(); const m = document.getElementById('moneyIn'); if (m) m.focus(); return; }
+  if (t.closest('#cancelMoney')) { view.adding = false; render(); return; }
+  if (t.closest('#saveMoney')) { addMoney(); return; }
+  const gd = t.closest('[data-gdel]');
+  if (gd) {
+    const id = gd.dataset.gdel;
+    if (view.gArmed === id) { view.gArmed = null; save(deleteDoc(doc(giftsCol, id))); }
+    else { view.gArmed = id; gd.textContent = 'Delete?'; }
+    return;
+  }
   const li = t.closest('.item'), item = li ? find(li.dataset.id) : null;
-  if (t.closest('.check') && item) { item.paid = !item.paid; render(); save(updateDoc(doc(itemsCol, item.id), { paid: item.paid })); return; }
+  if (t.closest('.check') && item) { item.paid = !item.paid; if (item.paid) celebrate(item); render(); save(updateDoc(doc(itemsCol, item.id), { paid: item.paid })); return; }
   if (t.closest('.row') && item) { view.open = view.open === item.id ? null : item.id; view.armed = null; render(); return; }
   const f = t.closest('[data-filter]');
   if (f) { view.filter = f.dataset.filter; render(); return; }
@@ -246,6 +423,18 @@ app.addEventListener('click', async e => {
   }
 });
 
+function addMoney(){
+  const inp = document.getElementById('moneyIn');
+  const amt = inp ? num(inp.value) : 0;
+  if (!amt) { if (inp) { inp.focus(); inp.placeholder = 'Type an amount first'; } return; }
+  view.adding = false;
+  if (inp) inp.blur();
+  save(setDoc(doc(giftsCol), { amount: amt, date: today() }));
+  render();
+}
+
+app.addEventListener('keydown', e => { if (e.target.id === 'moneyIn' && e.key === 'Enter') { e.preventDefault(); addMoney(); } });
+
 app.addEventListener('input', e => {
   const t = e.target;
   if (t.id === 'noteIn') { note = t.value; return; }
@@ -254,11 +443,12 @@ app.addEventListener('input', e => {
   item[key] = (key === 'total' || key === 'deposit') ? num(t.value) : t.value;
   li.querySelector('.row').innerHTML = rowInner(item);
   document.getElementById('summary').innerHTML = summaryInner();
+  const mb = document.getElementById('money'); if (mb) mb.innerHTML = moneyInner();
 });
 
 app.addEventListener('change', e => {
   const t = e.target;
-  if (t.id === 'noteIn') { save(setDoc(metaDoc, { note: t.value })); return; }
+  if (t.id === 'noteIn') { save(setDoc(metaDoc, { note: t.value }, { merge: true })); return; }
   const key = t.dataset.f; if (!key) return;
   const li = t.closest('.item'), item = li && find(li.dataset.id); if (!item) return;
   if (key === 'depPaid') { item.depPaid = t.checked; render(); }
