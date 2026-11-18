@@ -80,7 +80,12 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--marigold);outli
 .small.go{background:var(--maroon);border-color:var(--maroon);color:var(--on-maroon);font-weight:600}
 .money .add{margin-top:12px}
 .mood{margin:8px 0 0;font-size:.95rem;text-align:center;color:var(--muted)}
-.count{display:inline-block;margin-top:6px;font-size:.9rem;font-weight:600;color:var(--maroon);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
+.count{display:flex;align-items:flex-end;gap:6px;margin-top:10px;flex-wrap:wrap}
+.count .u{display:grid;justify-items:center;min-width:52px;padding:6px 6px 4px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.count .u b{font-size:1.35rem;line-height:1.1;color:var(--maroon);font-variant-numeric:tabular-nums}
+.count .u i{font-style:normal;font-size:.72rem;color:var(--muted)}
+.count .tail{font-size:.9rem;color:var(--muted);padding:0 0 6px 2px}
+.count.done{display:inline-block;font-size:.95rem;font-weight:600;color:var(--maroon);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
 .petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
 .petal{position:absolute;top:-24px;width:14px;height:10px;border-radius:60% 40% 60% 40%;background:var(--marigold);opacity:.95;animation:fall linear forwards}
 .petal.r{background:var(--maroon)}
@@ -243,12 +248,23 @@ function moneyInner(){
   return html;
 }
 
-function countdown(){
-  const now = new Date(); now.setHours(0, 0, 0, 0);
-  const days = Math.round((new Date(2027, 8, 3) - now) / 86400000);
-  const t = days > 1 ? days.toLocaleString('en-MY') + ' days to go 💍' : days === 1 ? 'Tomorrow! 💍' : days === 0 ? 'Today is the day! 🎉' : 'Happily married 🎉';
-  return '<span class="count">' + t + '</span>';
+// Wedding time (muhurtham): 3 Sept 2027, 8:00 am Malaysia/Singapore time. Change the time here if needed.
+const WEDDING = new Date('2027-09-03T08:00:00+08:00');
+function countdownInner(){
+  const ms = WEDDING - Date.now();
+  if (ms <= 0) {
+    return ms > -16 * 3600000 ? 'Today is the day! 🎉' : 'Happily married 🎉';
+  }
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400), hr = Math.floor(s % 86400 / 3600), mi = Math.floor(s % 3600 / 60), se = s % 60;
+  const u = (n, l) => '<span class="u"><b>' + String(n).padStart(2, '0') + '</b><i>' + l + '</i></span>';
+  return '<span class="u"><b>' + d.toLocaleString('en-MY') + '</b><i>days</i></span>' + u(hr, 'hrs') + u(mi, 'min') + u(se, 'sec') + '<span class="tail">to go 💍</span>';
 }
+function countdown(){
+  const done = WEDDING - Date.now() <= 0;
+  return '<div class="count' + (done ? ' done' : '') + '" id="count" role="timer">' + countdownInner() + '</div>';
+}
+setInterval(() => { const c = document.getElementById('count'); if (c) c.innerHTML = countdownInner(); }, 1000);
 
 function moodLine(given, left){
   if (!given) return '';
